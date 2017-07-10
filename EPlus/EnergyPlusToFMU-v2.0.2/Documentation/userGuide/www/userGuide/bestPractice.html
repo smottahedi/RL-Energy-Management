@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. Best Practice &mdash; FMU Export of EnergyPlus User Guide</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="FMU Export of EnergyPlus User Guide" href="index.html" />
+    <link rel="next" title="8. Development" href="development.html" />
+    <link rel="prev" title="6. Mathematical Description" href="mathematics.html" /> 
+  </head>
+  <body role="document">
+<div class="headerStyle">
+<img src="_static/lbl-logo.png" alt="LBL logo" />
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="development.html" title="8. Development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mathematics.html" title="6. Mathematical Description"
+             accesskey="P">previous</a> |</li>
+    <li><a href="http://simulationresearch.lbl.gov/fmu/EnergyPlus/export/index.html">Home</a> |
+    <a href="index.html">User Guide</a></li>
+    </br>
+<!--    
+        <li class="nav-item nav-item-0"><a href="index.html">FMU Export of EnergyPlus User Guide</a> &raquo;</li> -->
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. Best Practice</a><ul>
+<li><a class="reference internal" href="#configuring-an-energyplus-model-which-uses-the-schedule-object">7.1. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">Schedule</span></code> object</a></li>
+<li><a class="reference internal" href="#configuring-an-energyplus-model-which-uses-the-ems-actuator-object">7.2. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">EMS</span> <span class="pre">Actuator</span></code> object</a></li>
+<li><a class="reference internal" href="#configuring-an-energyplus-model-which-uses-the-ems-variable-object">7.3. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">EMS</span> <span class="pre">Variable</span></code> object</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mathematics.html"
+                        title="previous chapter">6. Mathematical Description</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="development.html"
+                        title="next chapter">8. Development</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/bestPractice.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="best-practice">
+<span id="bestpractice"></span><h1>7. Best Practice<a class="headerlink" href="#best-practice" title="Permalink to this headline">¶</a></h1>
+<p>This section explains to users the best practice in configuring an EnergyPlus model
+for an FMU.</p>
+<p>To export EnergyPlus as an FMU, four objects have been added to the EnergyPlus data structure. These objects are:</p>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">ExternalInterface:FunctionalMockupUnitExport:From:Variable</span></code> object,
+which is used to map the outputs of the FMU to the EnergyPlus
+objects <code class="docutils literal"><span class="pre">Output:Variable</span></code> and <code class="docutils literal"><span class="pre">EnergyManagementSystem:OutputVariable</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">ExternalInterface:FunctionalMockupUnitExport:To:Schedule</span></code>,
+<code class="docutils literal"><span class="pre">ExternalInterface:FunctionalMockupUnitExport:To:Actuator</span></code>,
+and <code class="docutils literal"><span class="pre">ExternalInterface:FunctionalMockupUnitExport:To:Variable</span></code>,
+which are used to map the inputs of the FMU to EnergyPlus schedules,
+EMS actuators, and variables.</li>
+</ul>
+<p>These objects are described in the Input/Output reference of the <a class="reference external" href="https://energyplus.net/documentation">EnergyPlus manual</a>.</p>
+<div class="section" id="configuring-an-energyplus-model-which-uses-the-schedule-object">
+<h2>7.1. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">Schedule</span></code> object<a class="headerlink" href="#configuring-an-energyplus-model-which-uses-the-schedule-object" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we like to export an EnergyPlus model of a room with
+an ideal HVAC system that adds heating or cooling to the zone as schedules,
+to maintain a certain room temperature.</p>
+<p>Such an  EnergyPlus model could be exported as an FMU with
+one input and one output. The input of the FMU will write to the heating/cooling
+time schedule, whereas the output of the FMU will read the room dry-bulb temperature.</p>
+<p>The Energyplus model needs to contain the following three items:</p>
+<ul class="simple">
+<li>An object that instructs EnergyPlus to activate the external interface.</li>
+<li>EnergyPlus objects that read inputs of the FMU and send the values to EnergyPlus.</li>
+<li>EnergyPlus objects that read data from EnergyPlus and send the values to the outputs of the FMU.</li>
+</ul>
+<p>The code below shows how to declare these objects in the IDF.
+To activate the external interface, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface,           !- Object to activate external interface
+FunctionalMockupUnitExport;  !- Name of external interface
+</pre></div>
+</div>
+</div></blockquote>
+<p>To define the input of the FMU, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface:FunctionalMockupUnitExport:To:Schedule,
+FMU_OthEqu_ZoneOne,      !- Name
+Any Number,              !- Schedule Type Limits Names
+Q,                       !- FMU Variable Name
+0;                       !- Initial Value
+</pre></div>
+</div>
+</div></blockquote>
+<p>To define the output of the FMU, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface: FunctionalMockupUnitExport:From:Variable,
+ZONE ONE,                  !- Output:Variable Index Key Name
+Zone Mean Air Temperature, !- Output:Variable Name
+TRooMea;                   !- FMU Variable Name
+</pre></div>
+</div>
+</div></blockquote>
+<p>Along with the FMU&#8217;s output definition, the
+EnergyPlus output variable which corresponds to the FMU output needs
+to be specified in the IDF file:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>Output:Variable,
+ZONE ONE,                    !- Key Value
+Zone Mean Air Temperature,   !- Variable Name
+TimeStep;                    !- Reporting Frequency
+</pre></div>
+</div>
+</div></blockquote>
+<p>These specifications are used in the example that is available in <code class="docutils literal"><span class="pre">Examples/Schedule</span></code>.</p>
+<blockquote>
+<div><div class="figure" id="id2">
+<a class="reference internal image-reference" href="_images/_schedule.png"><img alt="_images/_schedule.png" src="_images/_schedule.png" style="width: 514.5px; height: 210.5px;" /></a>
+<p class="caption"><span class="caption-text">Configuration of an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">Schedule</span></code>.</span></p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="configuring-an-energyplus-model-which-uses-the-ems-actuator-object">
+<h2>7.2. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">EMS</span> <span class="pre">Actuator</span></code> object<a class="headerlink" href="#configuring-an-energyplus-model-which-uses-the-ems-actuator-object" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we like to export an EnergyPlus model of a room that has a shading controller.
+The shading controller requires as input the shading
+actuation signal <code class="docutils literal"><span class="pre">yShade</span></code>, and has as outputs the outside temperature <code class="docutils literal"><span class="pre">TRoo</span></code>
+and the solar irradiation <code class="docutils literal"><span class="pre">ISolExt</span></code> that is incident on the window.</p>
+<p>We will export such an EnergyPlus model as an FMU with
+one input and two outputs. The input of the FMU will write to the shading actuation signal,
+whereas the outputs will read the outside temperature <code class="docutils literal"><span class="pre">TRoo</span></code> and the solar irradiation <code class="docutils literal"><span class="pre">ISolExt</span></code>.</p>
+<p>The code below shows how to declare these objects in the IDF.
+To activate the external interface, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface,           !- Object to activate external interface
+FunctionalMockupUnitExport;  !- Name of external interface
+</pre></div>
+</div>
+</div></blockquote>
+<p>To define the input of the FMU, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface:FunctionalMockupUnitExport:To:Actuator,
+Zn001_Wall001_Win001_Shading_Deploy_Status,  !- Name
+Zn001:Wall001:Win001,                        !- Actuated Component Unique Name
+Window Shading Control,                      !- Actuated Component Type
+Control Status,                              !- Actuated Component Control Type
+yShade,                                      !- FMU Variable Name
+6;                                           !- Initial Value
+</pre></div>
+</div>
+</div></blockquote>
+<p>To define the outputs of the FMU, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface:FunctionalMockupUnitExport:From:Variable,
+WEST ZONE,                                   !- Output:Variable Index Key Name
+Zone Mean Air Temperature,                   !- Output:Variable Name
+TRoo;                                        !- FMU Variable Name
+
+ExternalInterface:FunctionalMockupUnitExport:From:Variable,
+Zn001:Wall001:Win001,                                        !- Output:Variable Index Key Name
+Surface Outside Face Incident Solar Radiation Rate per Area, !- Output:Variable Name
+ISolExt;                                                     !- FMU Variable Name
+</pre></div>
+</div>
+</div></blockquote>
+<p>Along with the FMU&#8217;s outputs definition, the
+EnergyPlus output variables which correspond to the FMU outputs need
+to be specified in the IDF file:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>Output:Variable,
+Zn001:Wall001:Win001,                                         !- Key Value
+Surface Outside Face Incident Solar Radiation Rate per Area,  !- Variable Name
+TimeStep;                                                     !- Reporting Frequency
+
+Output:Variable,
+WEST ZONE,                          !- Key Value
+Zone Mean Air Temperature,          !- Variable Name
+TimeStep;                           !- Reporting Frequency
+</pre></div>
+</div>
+</div></blockquote>
+<p>These specifications are used in the example that is available in <code class="docutils literal"><span class="pre">Examples/Actuator</span></code>.</p>
+<blockquote>
+<div><div class="figure" id="id3">
+<a class="reference internal image-reference" href="_images/_ems.png"><img alt="_images/_ems.png" src="_images/_ems.png" style="width: 514.5px; height: 210.5px;" /></a>
+<p class="caption"><span class="caption-text">Configuration of an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">EMS</span> <span class="pre">Actuator</span></code>.</span></p>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="configuring-an-energyplus-model-which-uses-the-ems-variable-object">
+<h2>7.3. Configuring an EnergyPlus model which uses the <code class="docutils literal"><span class="pre">EMS</span> <span class="pre">Variable</span></code> object<a class="headerlink" href="#configuring-an-energyplus-model-which-uses-the-ems-variable-object" title="Permalink to this headline">¶</a></h2>
+<p>This configuration is almost the same as in the previous example with the only
+difference being that the shading actuation signal will be written to an EMS variable
+<code class="docutils literal"><span class="pre">yShade</span></code> that can be used in an EMS program.</p>
+<p>To define the input of the FMU, we use:</p>
+<blockquote>
+<div><div class="highlight-text"><div class="highlight"><pre><span></span>ExternalInterface:FunctionalMockupUnitExport:To:Variable,
+yShade,                  !- Name
+yShadeFMU,               !- FMU Variable Name
+6;                       !- Initial Value
+</pre></div>
+</div>
+</div></blockquote>
+<p>These specifications are used in the example that is available in <code class="docutils literal"><span class="pre">Examples/Variable</span></code>.</p>
+<p>Please see the Input/Output reference of the <a class="reference external" href="https://energyplus.net/documentation">EnergyPlus manual</a>.</p>
+<p>Please read <a class="reference internal" href="installation.html"><span class="doc">Installation and Configuration</span></a> to see how to generate an FMU.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="development.html" title="8. Development"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mathematics.html" title="6. Mathematical Description"
+             >previous</a> |</li>
+    <li><a href="http://simulationresearch.lbl.gov/fmu/EnergyPlus/export/index.html">Home</a> |
+    <a href="index.html">User Guide</a></li>
+    </br>
+<!--    
+        <li class="nav-item nav-item-0"><a href="index.html">FMU Export of EnergyPlus User Guide</a> &raquo;</li> -->
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, The Regents of the University of California (through Lawrence Berkeley National Laboratory).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+    </div>
+  </body>
+</html>
