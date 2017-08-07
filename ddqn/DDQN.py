@@ -31,6 +31,10 @@ class DDQNAgent(object):
         self.network = self._build_network()
         self.target_network = self._build_network()
         self.update_target_network()
+        self.target = []
+        self.advantage = []
+        self.value = []
+
 
 
     def _build_network(self):
@@ -81,7 +85,10 @@ class DDQNAgent(object):
                 a = self.network.predict(next_state.reshape((1, self.state_size)))[0]
                 t = self.target_network.predict(next_state.reshape((1, self.state_size)))[0]
                 target[0][action] = reward + self.gamma * t[np.argmax(a)]
-            self.network.fit(state.reshape((1,self.state_size)), target, epochs=1, verbose=0)
+                self.target.append(target[0])
+                self.advantage.append(a)
+                self.value.append(t)
+            self.network.fit(state.reshape((1,self.state_size)), target, epochs=1, verbose=1)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 

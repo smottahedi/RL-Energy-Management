@@ -86,7 +86,7 @@ class EP(gym.Env):
         t = np.linspace(start_time,
                         final_time,
                         self.numSteps + 1,
-                        dtype=np.int64)
+                        dtype=np.int32)
 
 
 
@@ -111,7 +111,6 @@ class EP(gym.Env):
             df[key] = res[key]
 
         df['managerAction'] = avail_manager_action
-        df['battery_action'] = battery_action
         df['battery_flag'] = battery_flag.insert(0, 0)
         df[self.battery.id] = self.battery.get_history()['state'][self.counter * self.numSteps:
                                                         (self.counter + 1) * self.numSteps + 1]
@@ -123,9 +122,9 @@ class EP(gym.Env):
 
 
 
-        df.to_hdf('./save/store.h5', 'table', append=True)
+        #df.to_hdf('./save/store.h5', 'table', append=True)
 
-        # self.store = self.store.append(df)
+        self.store = self.store.append(df)
         self.date = self.date + datetime.timedelta(days=1)
 
         self.state = df[['outdoorDbTemp', 'solar_generation',
@@ -139,7 +138,6 @@ class EP(gym.Env):
         reward = - np.clip(df['substation_electiricty'], -1, 1)
         done = np.zeros(reward.shape[0]) > 1
         done[-1] = True
-
         return self.state.values, reward, done
 
     def _reset(self):
