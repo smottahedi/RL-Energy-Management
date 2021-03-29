@@ -73,7 +73,7 @@ pydocstyle==2.0.0
 pyflakes==1.5.0
 PyFMI==2.4
 pyglet==1.2.4
-Pygments==2.2.0
+Pygments==2.7.4
 pylama==7.3.3
 pylint==1.7.1
 pyparsing==2.2.0
